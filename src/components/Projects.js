@@ -1,3 +1,6 @@
+import React,{ useEffect, useState } from "react";
+import {LINK} from "../utils/remotes";
+
 const style = {
   container: {
     display: "flex",
@@ -37,29 +40,23 @@ const style = {
     url: {
       fontSize:"calc(8px + 1vmin)",
       textDecoration: "none",
+      color:"#dbbbff"
     }
   }
 }
 
 const Projects = props => {
   const {styles} = props;
-  const projects = [
-    {
-      name: "React TIUINWS",
-      url: "https://react-tiuinws.netlify.app/",
-      description: "React app overview for fetching static api repository TIUINWS."
-    },
-    {
-      name: "Static APIs",
-      url: "https://github.com/tiuinws/static-api",
-      description: "A collection of static data about something."
-    },
-    {
-      name: "Scratch Blogger Theme",
-      url: "https://github.com/tiuinws/scratchbloggertheme",
-      description: "A clean Blogger.com theme."
-    }
-  ]
+  const [projects, setProjects] = useState([]);
+
+  useEffect(() => {
+    fetch(LINK.projects)
+    .then(res => res.ok ? res.json() : null)
+    .then(resJson => {
+      setProjects(resJson)
+    })
+  },[])
+
   return (
     <div>
       <h3 style={styles.component.title}>Our Projects 🚧</h3>
@@ -67,7 +64,7 @@ const Projects = props => {
         {
           projects.map(project =>
           (
-            <div style={style.item.container}>
+            <div style={style.item.container} key={project.name}>
               <h4 style={style.item.title}>{project.name}</h4>
               <p style={style.item.desc}>{project.description}</p>
               <a href={project.url} target="_blank" rel="noreferrer" style={style.item.url}>View Project</a> 👆

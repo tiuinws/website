@@ -1,3 +1,6 @@
+import React,{useState, useEffect} from "react";
+import {LINK} from "../utils/remotes";
+
 const style = {
   container: {
     display: "flex",
@@ -20,12 +23,16 @@ const style = {
 
 const Goals = props => {
   const {styles} = props;
-  const goals = [
-      "🤗 Empower Walisongo Colleagues 🥳",
-      "👽 Learn the Latest Technology 🕴",
-      "🧠 Build Portfolio and Learn Creatively  🤹🏼‍♂️",
-      "🏋 Prepare Industry or <your-own> Standard 👌"
-  ]
+  const [goals, setGoals] = useState([]);
+
+  useEffect(() => {
+    fetch(LINK.goals)
+    .then(res => res.ok ? res.json() : null)
+    .then(resJson => {
+      setGoals(resJson)
+    })
+  },[])
+
   return (
     <div>
       <h3 style={styles.component.title}>Our Goals 🎉</h3>
@@ -33,7 +40,7 @@ const Goals = props => {
         {
           goals.map(goal =>
           (
-            <div style={style.item}>
+            <div style={style.item} key={goal}>
               {goal}
             </div>
           )
